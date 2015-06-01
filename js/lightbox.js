@@ -60,7 +60,7 @@
         // Attach event handlers to the new DOM elements. click click click
         Lightbox.prototype.build = function () {
             var self = this;
-            $("<div id='lightboxOverlay' class='lightboxOverlay'></div><div id='lightbox' class='lightbox'><div class='lb-outerContainer'><div class='lb-container'><img class='lb-image' src='' /><div class='lb-nav'><a class='lb-prev' href='' ></a><a class='lb-next' href='' ></a></div><div class='lb-loader'><a class='lb-cancel'></a></div></div></div><div class='lb-dataContainer'><div class='lb-data'><div class='lb-minigallery'></div><div class='lb-details'><span class='lb-caption'></span><span class='lb-number'></span></div><div class='lb-closeContainer'><a class='lb-close'></a></div></div></div></div>").appendTo($('body'));
+            $("<div id='lightboxOverlay' class='lightboxOverlay'></div><div id='lightbox' class='lightbox'><div class='lb-outerContainer'><div class='lb-container'><img class='lb-image' src='' /><div class='lb-nav'><a class='lb-prev' href='' ></a><a class='lb-next' href='' ></a></div><div class='lb-loader'><a class='lb-cancel'></a></div></div></div><div class='lb-minigallery'><div class='lb-minigallery-nav'><a class='lb-minigallery-prev' href='' ></a><a class='lb-minigallery-next' href='' ></a></div></div><div class='lb-dataContainer'><div class='lb-data'><div class='lb-details'><span class='lb-caption'></span><span class='lb-number'></span></div><div class='lb-closeContainer'><a class='lb-close'></a></div></div></div></div>").appendTo($('body'));
 
             // Cache jQuery objects
             this.$lightbox = $('#lightbox');
@@ -177,6 +177,10 @@
                 left: left + 'px'
             }).fadeIn(this.options.fadeDuration);
 
+            if(self.options.showMiniGallery) {
+                this.loadMiniGallery();
+            }
+
             this.changeImage(imageNumber);
         };
 
@@ -193,6 +197,7 @@
             this.$lightbox.find('.lb-image, .lb-nav, .lb-prev, .lb-next, .lb-dataContainer, .lb-numbers, .lb-caption').hide();
 
             this.$outerContainer.addClass('animating');
+
 
             // When image to show is preloaded, we send the width and height to sizeContainer()
             var preloader = new Image();
@@ -347,8 +352,6 @@
                 this.$lightbox.find('.lb-number').hide();
             }
 
-            this.loadMiniGallery();
-
             this.$outerContainer.removeClass('animating');
 
             this.$lightbox.find('.lb-dataContainer').fadeIn(this.options.resizeDuration, function () {
@@ -363,21 +366,24 @@
             // If it's an actual gallery
             if (this.album.length > 1 && this.options.showMiniGallery){
                 var minigallery = self.$lightbox.find('.lb-minigallery');
-                console.log(minigallery);
+                $(minigallery).remove('.lb-minigallery-thumb');  // Need to remove the previous gallery's images
 
+                // Construct the gallery and the
                 for(var i = 0; i < self.album.length; i++){
                     var thumbnail = new Image();
                     thumbnail.src = self.album[i].thumb;
+                    $(thumbnail).addClass('.lb-minigallery-thumb');  // This will come in handy later
+
+                    $(minigallery).append(thumbnail);
 
                     // attach an event handler to switch the image
                     $(thumbnail).on({
                         click: function(){
-                            var current = this;
-                            var current_index = 0;
-                            console.log(self.album);
+                            var $lb = $('.lb-minigallery');  // Cache the current mini gallery
+                            var selected_index = $lb.find('img').index(this); // get the selected image's index
+                            self.changeImage(selected_index);
                         }
                     });
-                    $(minigallery).append(thumbnail);
                 }
             }
         };

@@ -210,11 +210,24 @@ body:after {
 }
 
 .lb-minigallery {
-    display: inline-flex;
+    display: inline;
     height: 100px;
+    overflow: hidden;
+    width: 50%;
+    margin: 0 auto;
 }
 
 .lb-minigallery img {
-    flex-direction: row;
+    max-height: 91px;
+    max-width: 91px;
     width: auto;
+    padding: 4px;
+    margin: 5px;
+    border-radius: 5px;
+    background-color: rgba(255, 255, 255, 0.75);
+    transition: background-color 0.3s ease;
+}
+
+.lb-minigallery img:hover {
+    background-color: white;
 }

@@ -3,6 +3,7 @@
 The original lightbox script. Eight years later — still going strong!
 
 Modified for a small project by Wes Gilleland (Deathnerd). Hosted here for ease of access. Might push as a new feature back to parent. Might not
+TODO: paginate the minigallery and add controls
 
 ## Demo and basic instructions
 [Goto the Lightbox2 page](http://lokeshdhakar.com/projects/lightbox2/)
